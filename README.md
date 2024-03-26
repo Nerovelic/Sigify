@@ -68,7 +68,7 @@ Para ejecutar el proyecto es necesario, instalar y configurar lo siguiente:
 
 <!-- System Function -->
 
-## Librerias Instalados
+## Librerias Instaladas
 
 - [Electron-serve](https://www.npmjs.com/package/electron-serve) esto permite que los enrutadores funcionen correctamente.
 - [Electron](https://www.electronjs.org/es/) para creear aplicaciones de escritorio multiplataforma con JavaScript, HTML y CSS.
