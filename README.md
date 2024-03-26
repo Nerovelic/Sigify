@@ -26,13 +26,13 @@
         <li><a href="#usuario">Usuario</a></li>
       </ul>
     </li>
-    <li><a href="#librerias-instalados">Librerias Instalados</a></li>
+    <li><a href="#librerias-instaladas">Librerias Instaladas</a></li>
      <li>
       <a href="#desarrollo">Desarrollo</a>
       <ul>
         <li><a href="#tecnologías-seleccionadas">Tecnologías Seleccionadas</a></li>
           <ul>
-            <li><a href="#next.js">Next.js</a></li>
+            <li><a href="#nextjs">Next.js</a></li>
             <li><a href="#electron">Electron</a></li>
             <li><a href="#electron-builder">Electron Builder</a></li>
           </ul>
@@ -80,7 +80,7 @@ Para ejecutar el proyecto es necesario, instalar y configurar lo siguiente:
 
 <!-- System Function -->
 
-## Librerias Instaladas
+### Librerias Instaladas
 
 - [Electron-serve](https://www.npmjs.com/package/electron-serve) esto permite que los enrutadores funcionen correctamente.
 - [Electron](https://www.electronjs.org/es/) para creear aplicaciones de escritorio multiplataforma con JavaScript, HTML y CSS.
@@ -118,7 +118,7 @@ Como se puede ver la aplicación  Sigify, todos los usuarios tienen acceso compl
 
 #### Tecnologías Seleccionadas
 
-#### Next.js
+#### Nextjs
 
 Next.js desempeña un papel fundamental al proporcionar un entorno de desarrollo web moderno y eficiente. Con Next.js, podemos crear aplicaciones web rápidas y escalables con facilidad, aprovechando su capacidad de renderización híbrida y su enfoque en la optimización del rendimiento.
 
