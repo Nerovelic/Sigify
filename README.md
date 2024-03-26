@@ -132,7 +132,7 @@ Electron Builder es una herramienta esencial para el proceso de empaquetado y di
 
 #### Resultados y Objetivos
 
-Este conjunto de tecnologías nos capacita para ejecutar consultas de manera exitosa, cumpliendo con los estándares más rigurosos de eficiencia y seguridad. Nuestro compromiso es satisfacer de manera óptima las necesidades y expectativas tanto de los usuarios finales como del personal interno.
+Este conjunto de tecnologías nos capacita para ejecutar consultas de manera exitosa, cumpliendo con los estándares más rigurosos de eficiencia y seguridad. El compromiso es entregar un producto óptimo que satisfaga las necesidades y expectativas de los usuarios finales, ofreciendo soluciones efectivas para sus desafíos.
 
 <p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
