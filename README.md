@@ -23,10 +23,22 @@
     <li>
       <a href="#funciones-generales">Funciones Generales</a>
       <ul>
-        <li><a href="#Usuario">Usuario</a></li>
+        <li><a href="#usuario">Usuario</a></li>
       </ul>
     </li>
-    <li><a href="#Librerias-Instalados">Librerias Instalados</a></li>
+    <li><a href="#librerias-instalados">Librerias Instalados</a></li>
+     <li>
+      <a href="#desarrollo">Desarrollo</a>
+      <ul>
+        <li><a href="#tecnologías-seleccionadas">Tecnologías Seleccionadas</a></li>
+          <ul>
+            <li><a href="#next.js">Next.js</a></li>
+            <li><a href="#electron">Electron</a></li>
+            <li><a href="#electron-builder">Electron Builder</a></li>
+          </ul>
+        <li><a href="#resultados-y-objetivos">Resultados y Objetivos</a></li>
+      </ul>
+     </li>
     <li><a href="#contacto">Contacto</a></li>
   </ol>
 </details>
