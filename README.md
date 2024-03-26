@@ -26,7 +26,7 @@
         <li><a href="#Usuario">Usuario</a></li>
       </ul>
     </li>
-    <li><a href="#Librerias Instalados">Librerias Instalados</a></li>
+    <li><a href="#Librerias-Instalados">Librerias Instalados</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ol>
 </details>
