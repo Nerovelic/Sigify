@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<!--PROJECT BANNER-->
 
-## Getting Started
+<a name="readme-top"></a>
+<br />
 
-First, run the development server:
+<div align="center">
+  <h3 align="center">Sigify</h3>
+  <p align="center">
+    Una aplicación intuitiva para digitalizar firmas electrónicas de manera rápida y sencilla.
+  </p>
+</div>
+<!--TABLE OF CONTENTS-->
+<details>
+  <summary>Tabla de Contenido</summary>
+  <ol>
+    <li>
+      <a href="#empezando">Empezando</a>
+      <ul>
+        <li><a href="#prerequisitos">Prerequisitos</a></li>
+        <li><a href="#instalacion">Instalacion</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#funciones-generales">Funciones Generales</a>
+      <ul>
+        <li><a href="#Usuario">Usuario</a></li>
+      </ul>
+    </li>
+    <li><a href="#Librerias Instalados">Librerias Instalados</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ol>
+</details>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<!-- GETTING STARTED -->
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Empezando
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+_Abajo se encuentra el proceso para ejecutar el proyecto. Requerira de Node.js 18.17 o superior._
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Prerequisitos
 
-## Learn More
+Para ejecutar el proyecto es necesario, instalar y configurar lo siguiente:
 
-To learn more about Next.js, take a look at the following resources:
+- [Node.js](https://nodejs.org/)
+- npm
+  ```sh
+  npm install npm@latest -g
+  ```
+### Instalacion
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clona el Repositorio.
+   ```sh
+   git clone https://github.com/Nerovelic/app-firmas.git
+   ```
+2. Vea a la Carpeta
+   ```sh
+    cd app-firmas
+   ```
+3. Instala los paquetes NPM.
+   ```sh
+   npm install
+   ```
+4. Ejecuta el proyecto.
+   ```sh
+    npm run dev
+   ```
+   <p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<!-- System Function -->
 
-## Deploy on Vercel
+## Librerias Instalados
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Electron-serve](https://www.npmjs.com/package/electron-serve) esto permite que los enrutadores funcionen correctamente.
+- [Electron](https://www.electronjs.org/es/) para creear aplicaciones de escritorio multiplataforma con JavaScript, HTML y CSS.
+- [Electron-builder](https://www.electron.build/index.html) es una solución completa para empaquetar y crear una aplicación de Electron lista para su distribución.
+- [MaterialUI](https://mui.com/) para Diseño de FrontEnd.
+- [Nextjs](https://nextjs.org/) para crear sitios web atractivos independientemente de su experiencia en diseño.
+  
+ <p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Funciones Generales
+
+Que puedes hacer en el Software como Usuario:
+
+### Usuario
+
+- Cargar Archivos
+  Cargar archivos en formatos Word y PDF.
+- Eliminar Archivos
+  Eliminar archivos seleccionados.
+- Abrir Archivo
+  Al abrir un archivo, se mostrará el nombre del archivo con tres opciones:
+  - Firmar de manera normal
+  - Firmar por inicial
+  - Añadir texto (solo visible en el programa, no en el documento)
+- Enviar o Guardar
+  Al finalizar, enviar por correo o guardar en un drive, opcionalmente convertido a PDF.
+
+Como se puede ver la aplicación  Sigify, todos los usuarios tienen acceso completo y no hay limitaciones en cuanto a las funciones disponibles. Todos los usuarios tienen la capacidad de cargar, visualizar y firmar documentos electrónicos, así como enviarlos o guardarlos en diferentes formatos. 
+
+ <p align="right">(<a href="#readme-top">Back to top</a>)</p>
+
+<!-- DEVELOPMENT -->
+
+## Desarrollo
+
+#### Tecnologías Seleccionadas
+
+#### Next.js
+
+Next.js desempeña un papel fundamental al proporcionar un entorno de desarrollo web moderno y eficiente. Con Next.js, podemos crear aplicaciones web rápidas y escalables con facilidad, aprovechando su capacidad de renderización híbrida y su enfoque en la optimización del rendimiento.
+
+#### Electron
+
+Electron es una tecnología clave en nuestro stack tecnológico, permitiéndonos desarrollar aplicaciones de escritorio multiplataforma utilizando tecnologías web estándar como HTML, CSS y JavaScript. Con Electron, podemos crear experiencias de usuario nativas en Windows, macOS y Linux, brindando a nuestros usuarios una experiencia consistente en todas las plataformas.
+
+#### Electron Builder
+
+Electron Builder es una herramienta esencial para el proceso de empaquetado y distribución de nuestras aplicaciones de Electron. Nos permite crear paquetes de instalación para diferentes plataformas de forma sencilla y automatizada, facilitando la distribución de nuestras aplicaciones a los usuarios finales.
+
+#### Resultados y Objetivos
+
+Este conjunto de tecnologías nos capacita para ejecutar consultas de manera exitosa, cumpliendo con los estándares más rigurosos de eficiencia y seguridad. Nuestro compromiso es satisfacer de manera óptima las necesidades y expectativas tanto de los usuarios finales como del personal interno.
+
+<p align="right">(<a href="#readme-top">Back to top</a>)</p>
+
+<!-- CONTACT -->
+
+## Contacto
+
+Direcciones Github de integrantes de Proyecto:
+
+- Nerovelic  [https://github.com/Nerovelic](https://github.com/Nerovelic)
+
+<p align="right">(<a href="#readme-top">Back to top</a>)</p>
