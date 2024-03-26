@@ -1,5 +1,5 @@
 {
-  "name": "app-firmas",
+  "name": "sigify",
   "version": "0.1.0",
   "main": "main/main.js",
   "private": true,
