@@ -1,11 +1,13 @@
 import Image from "next/image";
+import FolderIcon from "@mui/icons-material/Folder";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Barra superior */}
-      <div className="bg-gradient-to-r from-blue-500 to-green-500 h-12 flex items-center justify-between px-4 text-white font-semibold">
-        {/* Logo */}
+      <div className="bg-gradient-to-r from-blue-500 to-green-500 h-12 flex items-center justify-between px-4 text-white font-semibold mb-4">
+        {/* Icono en el lado izquierdo */}
         <div className="flex items-center">
           <Image
             src="/vercel.svg"
@@ -13,9 +15,8 @@ export default function Home() {
             width={100}
             height={24}
             priority
-            className="dark:invert mr-10"
+            className="dark:invert mr-4"
           />
-
           {/* Opciones de navegación */}
           <nav className="flex items-center space-x-4">
             <a href="#" className="hover:underline">
@@ -34,6 +35,21 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="-mb-2" />
+      {/* Texto de Documentos Recientes y iconos */}
+      <div className="flex flex-col items-center space-y-4 mb-10">
+        <div className="flex justify-between items-center w-full">
+          {/* Texto de Documentos Recientes */}
+          <span className="text-white text-lg ml-2">Documentos Recientes:</span>
+          <div className="flex items-center space-x-4 mr-2">
+            {/* Icono FolderIcon */}
+            <FolderIcon className="text-white text-3xl" />
+            {/* Icono DeleteIcon */}
+            <DeleteIcon className="text-white text-3xl" />
+          </div>
+        </div>
+      </div>
+
       {/* Contenido principal */}
       <main className="flex flex-col items-center justify-center flex-1 p-24">
         {/* Imagen */}
@@ -47,7 +63,6 @@ export default function Home() {
             className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
           />
         </div>
-
         {/* Resto del contenido */}
         <div className="grid text-center lg:max-w-5xl lg:w-full lg:grid-cols-4 lg:text-left">
           {/* contenido vacio */}
