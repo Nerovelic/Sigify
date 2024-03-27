@@ -1,8 +1,20 @@
+"use client";
 import Image from "next/image";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Home() {
+  // Funciones de manejo de clics para los iconos
+  const handleFolderClick = () => {
+    // Agrega la lógica para cuando se haga clic en el icono de la carpeta
+    console.log("Se hizo clic en el icono de la carpeta");
+  };
+
+  const handleDeleteClick = () => {
+    // Agrega la lógica para cuando se haga clic en el icono de eliminar
+    console.log("Se hizo clic en el icono de eliminar");
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Barra superior */}
@@ -43,9 +55,13 @@ export default function Home() {
           <span className="text-white text-lg ml-2">Documentos Recientes:</span>
           <div className="flex items-center space-x-4 mr-2">
             {/* Icono FolderIcon */}
-            <FolderIcon className="text-white text-3xl" />
+            <button onClick={handleFolderClick}>
+              <FolderIcon className="text-white text-3xl" />
+            </button>
             {/* Icono DeleteIcon */}
-            <DeleteIcon className="text-white text-3xl" />
+            <button onClick={handleDeleteClick}>
+              <DeleteIcon className="text-white text-3xl" />
+            </button>
           </div>
         </div>
       </div>
