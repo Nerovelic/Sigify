@@ -1,24 +1,39 @@
 "use client";
+import React, { useState } from "react";
 import Image from "next/image";
-import Navbar from "./components/Navbar";
-import FolderButton from "./botons/Folder";
-import DeleteButton from "./botons/Delete";
+import Navbar from "./components/navbar";
+import FolderButton from "./buttons/folder";
+import DeleteButton from "./buttons/delete";
+import { toggleTheme } from "./components/themeMode";
 
 export default function Home() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleMode = () => {
+    setIsDarkMode(!isDarkMode);
+    toggleTheme(!isDarkMode);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Barra de navegación */}
-      <Navbar />
+      <Navbar isDarkMode={isDarkMode} toggleMode={toggleMode} />
       {/* Resto del contenido */}
       <div className="-mb-2" />
       <div className="flex flex-col items-center space-y-4 mb-10">
         <div className="flex justify-between items-center w-full">
-          <span className="text-white text-lg ml-2">Documentos Recientes:</span>
+          <span
+            className={`${
+              isDarkMode ? "text-white" : "text-black"
+            } text-lg ml-2`}
+          >
+            Documentos Recientes:
+          </span>
           <div className="flex items-center space-x-4 mr-2">
             {/* Botón de carpeta */}
-            <FolderButton />
+            <FolderButton isDarkMode={isDarkMode} />
             {/* Botón de eliminar */}
-            <DeleteButton />
+            <DeleteButton isDarkMode={isDarkMode} />
           </div>
         </div>
       </div>
