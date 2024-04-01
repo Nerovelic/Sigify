@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Proyect Sigify",
+  title: "Sigify",
   description:
     "Una aplicación intuitiva para digitalizar firmas electrónicas de manera rápida y sencilla.",
 };
