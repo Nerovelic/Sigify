@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import SettingsIcon from "@mui/icons-material/Settings";
 // @ts-ignore
 import styles from "../css/modeTheme.css";
 
@@ -64,7 +65,12 @@ export default function Navbar({ isDarkMode, toggleMode }: NavbarProps) {
             </a>
           </nav>
         </div>
-
+        <button
+          onClick={() => console.log("el boton de ajustes se presiono")}
+          className="ml-[33%]"
+        >
+          <SettingsIcon className={`text-gray-600`} />
+        </button>
         {/* Botón de cambio de tema */}
         <button onClick={toggleMode}>
           {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
