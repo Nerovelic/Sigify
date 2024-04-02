@@ -1,17 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
 import FolderButton from "./buttons/folder";
 import DeleteButton from "./buttons/delete";
-import ListDocuments from "./components/listDocuments";
+import ListDocuments from "./listaDocumentos/listDocuments";
 import { toggleTheme } from "./components/themeMode";
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    savedTheme === "dark" ? setIsDarkMode(true) : setIsDarkMode(false);
+    toggleTheme(savedTheme === "dark");
+  }, []);
+
   const toggleMode = () => {
     setIsDarkMode(!isDarkMode);
     toggleTheme(!isDarkMode);
+    // Guardar la preferencia de tema en localStorage
+    localStorage.setItem("theme", isDarkMode ? "light" : "dark");
   };
 
   return (
