@@ -3,13 +3,13 @@ import React from "react";
 // Componente de documento individual con placeholder
 const DocumentItem = () => {
   return (
-    <div className="flex flex-col items-center p-4 border border-gray-200 rounded-md mr-2 mb-4">
-      {/* Fondo translúcido para el avatar */}
-      <div className="w-24 h-24 bg-gray-200 rounded-full mb-2 bg-opacity-50"></div>
-      {/* Fondo translúcido para el título */}
-      <div className="w-36 h-4 bg-gray-200 rounded mb-1 bg-opacity-50"></div>
-      {/* Fondo translúcido para la descripción */}
-      <div className="w-24 h-3 bg-gray-200 rounded bg-opacity-50"></div>
+    <div className="flex flex-col items-center p-4 border border-gray-200 rounded-md mr-2 mb-4 hover:bg-gray-100 hover:bg-opacity-50 transition duration-300">
+      {/* Contenedor para el avatar con animación de resaltado */}
+      <div className="w-24 h-24 bg-gray-200 rounded-full mb-2"></div>
+      {/* Contenedor para el título con animación de resaltado */}
+      <div className="w-36 h-4 bg-gray-200 rounded mb-1"></div>
+      {/* Contenedor para la descripción con animación de resaltado */}
+      <div className="w-24 h-3 bg-gray-200 rounded"></div>
     </div>
   );
 };
