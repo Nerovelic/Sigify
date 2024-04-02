@@ -14,7 +14,7 @@ interface NavbarProps {
 export default function Navbar({ isDarkMode, toggleMode }: NavbarProps) {
   return (
     <div className={isDarkMode ? styles["dark-nav"] : styles["light-nav"]}>
-      <div className="bg-gradient-to-r from-blue-500 to-green-500 h-12 flex items-center justify-between px-4 text-white font-semibold mb-4">
+      <div className="bg-gradient-to-r from-blue-500 to-green-500 h-12 flex items-center justify-between px-4 text-white font-semibold mb-4 relative">
         {/* Icono en el lado izquierdo */}
         <div className="flex items-center">
           <Image
@@ -65,16 +65,20 @@ export default function Navbar({ isDarkMode, toggleMode }: NavbarProps) {
             </a>
           </nav>
         </div>
-        <button
-          onClick={() => console.log("el boton de ajustes se presiono")}
-          className="ml-[33%]"
-        >
-          <SettingsIcon className={`text-gray-600`} />
-        </button>
-        {/* Botón de cambio de tema */}
-        <button onClick={toggleMode}>
-          {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
-        </button>
+        {/* Contenedor para los botones de modo oscuro y ajustes */}
+        <div className="flex items-center">
+          {/* Botón de ajustes */}
+          <button
+            onClick={() => console.log("el boton de ajustes se presiono")}
+            className="mr-4"
+          >
+            <SettingsIcon className={`text-gray-600`} />
+          </button>
+          {/* Botón de cambio de tema */}
+          <button onClick={toggleMode}>
+            {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          </button>
+        </div>
       </div>
     </div>
   );
