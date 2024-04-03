@@ -6,6 +6,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Link from "next/link";
+import ListDocuments from "../listaDocumentos/listDocuments";
 
 interface FolderDialogProps {
   isOpen: boolean;
@@ -20,7 +22,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xl">
       <DialogTitle>Abrir un archivo</DialogTitle>
       <DialogContent>
         <Tabs
@@ -34,21 +36,18 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
           <Tab label="Subir documentos" />
         </Tabs>
         {activeTab === 0 && (
-          <div>
-            <p>Contenido de Recientes:</p>
-            {/* Aquí puedes mostrar los elementos recientes */}
-            <p>Elemento 1</p>
-            <p>Elemento 2</p>
-            {/* Fin de elementos recientes */}
+          <div style={{ minHeight: "400px", padding: "16px" }}>
+            <ListDocuments size="w-2/3 h-32" />
           </div>
         )}
         {activeTab === 1 && (
-          <div>
+          <div style={{ minHeight: "400px", padding: "16px" }}>
+            <p>Contenido de Subir documentos:</p>
             <div>
               <p>Subir un archivo:</p>
               <input type="file" accept=".docx,.pdf" />
+              <button>Examinar</button>
             </div>
-            <button>Examinar</button>
           </div>
         )}
       </DialogContent>
