@@ -1,21 +1,10 @@
 export const toggleTheme = (isDarkMode: boolean) => {
+  const body = document.body; // o selecciona el elemento contenedor
   if (!isDarkMode) {
-    document.documentElement.style.setProperty(
-      "--background-start-rgb",
-      "255, 255, 255"
-    );
-    document.documentElement.style.setProperty(
-      "--background-end-rgb",
-      "214, 219, 220"
-    );
+    body.classList.remove("dark-mode");
+    body.classList.add("light-mode");
   } else {
-    document.documentElement.style.setProperty(
-      "--background-start-rgb",
-      "0, 0, 0"
-    );
-    document.documentElement.style.setProperty(
-      "--background-end-rgb",
-      "0, 0, 0"
-    );
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
   }
 };

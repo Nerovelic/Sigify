@@ -1,4 +1,9 @@
 import { useState } from "react";
+import FolderDialog from "../components/FolderDialog";
+
+interface UseClientProps {
+  // Define tus tipos de propiedades aquí si es necesario
+}
 
 export const useClient = () => {
   // Estado para controlar la visibilidad de la carpeta
@@ -8,14 +13,13 @@ export const useClient = () => {
   const openFolder = () => {
     setFolderVisible(true);
     console.log("Carpeta abierta");
-    // Agrega aquí la lógica adicional que necesites al abrir la carpeta
+    console.log("folderVisible:", folderVisible);
   };
 
   // Función para cerrar la carpeta
   const closeFolder = () => {
     setFolderVisible(false);
     console.log("Carpeta cerrada");
-    // Agrega aquí la lógica adicional que necesites al cerrar la carpeta
   };
 
   // Función para eliminar un elemento
@@ -30,5 +34,6 @@ export const useClient = () => {
     openFolder,
     closeFolder,
     deleteItem,
+    FolderDialog, // Agrega FolderDialog aquí si necesitas usarlo fuera del hook
   };
 };

@@ -4,14 +4,19 @@ import { useClient } from "../hooks/useClient";
 
 interface FolderButtonProps {
   isDarkMode: boolean;
+  onClick: () => void;
 }
 
-export default function FolderButton({ isDarkMode }: FolderButtonProps) {
+export default function FolderButton({
+  isDarkMode,
+  onClick,
+}: FolderButtonProps) {
   const { openFolder } = useClient();
 
   const handleFolderClick = () => {
     console.log("Se hizo clic en el icono de la carpeta");
     openFolder();
+    onClick(); // Llama a onClick aquí
   };
 
   return (
