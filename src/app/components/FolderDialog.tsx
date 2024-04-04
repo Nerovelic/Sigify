@@ -20,6 +20,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [fileUploaded, setFileUploaded] = useState<File | null>(null);
   const [uploadInProgress, setUploadInProgress] = useState(false);
+  const [progress, setProgress] = useState<number>(0);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setActiveTab(newValue);
@@ -51,15 +52,17 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
     reader.onload = () => {
       loadedSize += reader.result?.toString().length || 0;
       const percentage = Math.round((loadedSize / totalSize) * 100);
+      setProgress(percentage);
 
       if (loadedSize < totalSize) {
         setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
       } else {
-        // La carga del archivo ha terminado, cierra el dialogo
+        // Verificar si todo el archivo se ha cargado
         setTimeout(() => {
           onClose();
           setUploadInProgress(false);
-        }, 1000);
+          setProgress(0); // Restablecer el progreso
+        }, 100);
       }
     };
     reader.readAsText(file.slice(0, 1024));
@@ -107,7 +110,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
           {uploadInProgress ? (
             <div style={{ display: "flex", alignItems: "center" }}>
               <InsertDriveFileIcon style={{ marginRight: "10px" }} />
-              <LinearProgressWithLabel />
+              <LinearProgressWithLabel value={progress} />
             </div>
           ) : (
             <div>
