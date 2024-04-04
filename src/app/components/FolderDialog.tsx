@@ -7,7 +7,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import ListDocuments from "../listaDocumentos/listDocuments";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 interface FolderDialogProps {
   isOpen: boolean;
@@ -22,7 +23,13 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
     setActiveTab(newValue);
   };
 
-  const minHeight = isMaximized ? "400px" : "200px";
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      console.log("Archivo añadido:", e.target.files[0]);
+    }
+  };
+
+  const minHeight2 = isMaximized ? "400px" : "200px";
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
@@ -45,7 +52,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
         )}
         <div
           style={{
-            minHeight: minHeight,
+            minHeight: minHeight2,
             padding: "16px",
             display: "flex",
             flexDirection: "column",
@@ -64,7 +71,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
             console.log("Archivo soltado:", file);
           }}
         >
-          <CloudUploadIcon style={{ fontSize: 200, color: "#374347" }} />
+          <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
           {activeTab === 1 && (
             <div>
               <label
@@ -77,6 +84,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
                   type="file"
                   accept=".docx,.pdf"
                   className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                  onChange={handleFileInputChange}
                 />
               </label>
               <p>o arrastrar aquí un archivo</p>
