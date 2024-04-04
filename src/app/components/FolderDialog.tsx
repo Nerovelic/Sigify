@@ -10,6 +10,7 @@ import ListDocuments from "../listaDocumentos/listDocuments";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
+import Typography from "@material-ui/core/Typography";
 
 interface FolderDialogProps {
   isOpen: boolean;
@@ -109,7 +110,12 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
           )}
           {uploadInProgress ? (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <InsertDriveFileIcon style={{ marginRight: "200px" }} />
+              <InsertDriveFileIcon style={{ marginRight: "10px" }} />
+              <div style={{ marginRight: "155px" }}>
+                <Typography variant="body1" color="textSecondary">
+                  {fileUploaded?.name}
+                </Typography>
+              </div>
               <LinearProgressWithLabel value={progress} />
             </div>
           ) : (
