@@ -109,7 +109,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
           )}
           {uploadInProgress ? (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <InsertDriveFileIcon style={{ marginRight: "10px" }} />
+              <InsertDriveFileIcon style={{ marginRight: "200px" }} />
               <LinearProgressWithLabel value={progress} />
             </div>
           ) : (
