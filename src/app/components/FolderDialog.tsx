@@ -8,7 +8,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import ListDocuments from "../listaDocumentos/listDocuments";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
 interface FolderDialogProps {
   isOpen: boolean;
@@ -17,7 +18,8 @@ interface FolderDialogProps {
 
 const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [isMaximized, setIsMaximized] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState<File | null>(null);
+  const [uploadInProgress, setUploadInProgress] = useState(false);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setActiveTab(newValue);
@@ -25,11 +27,45 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      console.log("Archivo añadido:", e.target.files[0]);
+      const file = e.target.files[0];
+      console.log("Archivo añadido:", file);
+      handleFileUpload(file);
     }
   };
 
-  const minHeight2 = isMaximized ? "400px" : "200px";
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files[0];
+    console.log("Archivo soltado:", file);
+    handleFileUpload(file);
+  };
+
+  const handleFileUpload = (file: File) => {
+    setUploadInProgress(true);
+    setFileUploaded(file);
+    const totalSize = file.size;
+    let loadedSize = 0;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      loadedSize += reader.result?.toString().length || 0;
+      const percentage = Math.round((loadedSize / totalSize) * 100);
+
+      if (loadedSize < totalSize) {
+        setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
+      } else {
+        // La carga del archivo ha terminado, cierra el dialogo
+        setTimeout(() => {
+          onClose();
+          setUploadInProgress(false);
+        }, 1000);
+      }
+    };
+    reader.readAsText(file.slice(0, 1024));
+  };
+
+  const minHeight2 = "200px"; // Cambiado para mantenerlo en la vista
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
@@ -63,20 +99,23 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
             e.preventDefault();
             e.stopPropagation();
           }}
-          onDrop={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const file = e.dataTransfer.files[0];
-            // Aquí puedes manejar el archivo que se soltó
-            console.log("Archivo soltado:", file);
-          }}
+          onDrop={handleFileDrop}
         >
-          <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
-          {activeTab === 1 && (
+          {!uploadInProgress && (
+            <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
+          )}
+          {uploadInProgress ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <InsertDriveFileIcon style={{ marginRight: "10px" }} />
+              <LinearProgressWithLabel />
+            </div>
+          ) : (
             <div>
               <label
                 htmlFor="fileInput"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-14 rounded inline-block relative cursor-pointer"
+                className={`${
+                  uploadInProgress ? "hidden" : "block"
+                } bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-14 rounded inline-block relative cursor-pointer`}
               >
                 Subir archivo
                 <input
@@ -87,7 +126,9 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
                   onChange={handleFileInputChange}
                 />
               </label>
-              <p>o arrastrar aquí un archivo</p>
+              <p className={`${uploadInProgress ? "hidden" : "block"}`}>
+                o arrastrar aquí un archivo
+              </p>
             </div>
           )}
         </div>
