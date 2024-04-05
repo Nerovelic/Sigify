@@ -51,7 +51,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
 
     const reader = new FileReader();
     reader.onload = () => {
-      loadedSize += reader.result?.toString().length || 0;
+      loadedSize += reader.result?.toString().length ?? 0;
       const percentage = Math.round((loadedSize / totalSize) * 100);
       setProgress(percentage);
 
@@ -87,60 +87,62 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
         </Tabs>
         {activeTab === 0 && (
           <div style={{ minHeight: "400px", padding: "16px" }}>
-            <ListDocuments size="w-2/3 h-32" />
+            <ListDocuments size="w-2/5 h-32" />
           </div>
         )}
-        <div
-          style={{
-            minHeight: minHeight2,
-            padding: "16px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onDrop={handleFileDrop}
-        >
-          {!uploadInProgress && (
-            <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
-          )}
-          {uploadInProgress ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <InsertDriveFileIcon style={{ marginRight: "10px" }} />
-              <div style={{ marginRight: "155px" }}>
-                <Typography variant="body1" color="textSecondary">
-                  {fileUploaded?.name}
-                </Typography>
+        {activeTab === 1 && (
+          <div
+            style={{
+              minHeight: minHeight2,
+              padding: "16px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onDrop={handleFileDrop}
+          >
+            {!uploadInProgress && (
+              <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
+            )}
+            {uploadInProgress ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <InsertDriveFileIcon style={{ marginRight: "10px" }} />
+                <div style={{ marginRight: "155px" }}>
+                  <Typography variant="body1" color="textSecondary">
+                    {fileUploaded?.name}
+                  </Typography>
+                </div>
+                <LinearProgressWithLabel value={progress} />
               </div>
-              <LinearProgressWithLabel value={progress} />
-            </div>
-          ) : (
-            <div>
-              <label
-                htmlFor="fileInput"
-                className={`${
-                  uploadInProgress ? "hidden" : "block"
-                } bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-14 rounded inline-block relative cursor-pointer`}
-              >
-                Subir archivo
-                <input
-                  id="fileInput"
-                  type="file"
-                  accept=".docx,.pdf"
-                  className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
-                  onChange={handleFileInputChange}
-                />
-              </label>
-              <p className={`${uploadInProgress ? "hidden" : "block"}`}>
-                o arrastrar aquí un archivo
-              </p>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div>
+                <label
+                  htmlFor="fileInput"
+                  className={`${
+                    uploadInProgress ? "hidden" : "block"
+                  } bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-14 rounded inline-block relative cursor-pointer`}
+                >
+                  Subir archivo
+                  <input
+                    id="fileInput"
+                    type="file"
+                    accept=".docx,.pdf"
+                    className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                    onChange={handleFileInputChange}
+                  />
+                </label>
+                <p className={`${uploadInProgress ? "hidden" : "block"}`}>
+                  o arrastrar aquí un archivo
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">

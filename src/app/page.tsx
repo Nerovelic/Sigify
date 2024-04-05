@@ -16,7 +16,8 @@ export default function Home() {
 
   useEffect(() => {
     // Obtener el tema guardado en el almacenamiento local
-    const savedTheme = typeof window !== 'undefined' ? localStorage.getItem("theme") : null;
+    const savedTheme =
+      typeof window !== "undefined" ? localStorage.getItem("theme") : null;
     setIsDarkMode(savedTheme === "dark");
 
     // Forzar el tema solo si no se ha establecido previamente en el almacenamiento local
@@ -66,7 +67,7 @@ export default function Home() {
           </div>
         </div>
         <div className="relative flex items-center justify-center">
-          <ListDocuments />
+          <ListDocuments size={""} />
         </div>
       </div>
       {/* Renderiza FolderDialog cuando la carpeta esté abierta */}
