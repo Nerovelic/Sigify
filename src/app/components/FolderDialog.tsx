@@ -46,27 +46,21 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
   const handleFileUpload = (file: File) => {
     setUploadInProgress(true);
     setFileUploaded(file);
-    const totalSize = file.size;
-    let loadedSize = 0;
 
     const reader = new FileReader();
     reader.onload = () => {
-      loadedSize += reader.result?.toString().length ?? 0;
-      const percentage = Math.round((loadedSize / totalSize) * 100);
-      setProgress(percentage);
+      const fileContent = reader.result;
+      const blob = new Blob([fileContent as ArrayBuffer], { type: file.type });
+      const blobUrl = URL.createObjectURL(blob);
 
-      if (loadedSize < totalSize) {
-        setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
-      } else {
-        // Verificar si todo el archivo se ha cargado
-        setTimeout(() => {
-          onClose();
-          setUploadInProgress(false);
-          setProgress(0); // Restablecer el progreso
-        }, 100);
-      }
+      // Save blob URL to localStorage
+      localStorage.setItem("uploadedPdf", blobUrl);
+
+      onClose();
+      setUploadInProgress(false);
+      setProgress(0); // Reset progress
     };
-    reader.readAsText(file.slice(0, 1024));
+    reader.readAsArrayBuffer(file);
   };
 
   const minHeight2 = "200px"; // Cambiado para mantenerlo en la vista

@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: 220,
     right: 10,
-    left: 290,
+    left: 260,
     width: "24%",
   },
   progressLabel: {
