@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { getBlobFromIndexedDB } from "../utils/indexedDB"; // Importa la función
+import { getBlobFromIndexedDB } from "../utils/indexedDB";
 
 interface StoredFile {
   id: string;
@@ -36,17 +36,17 @@ const ListDocuments = ({ size }: { size: string }) => {
   }, []);
 
   return (
-    <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {storedFiles.length > 0 ? (
         storedFiles.map((doc) => (
           <Link
-            href={`/[id]/${doc.id}`} // Ruta dinámica basada en el ID del documento
+            href={`/listaDocumentos/${doc.id}`} // Ruta dinámica basada en el ID del documento
             key={doc.id}
             passHref
             legacyBehavior
           >
             <a
-              className={`flex flex-col items-center p-4 border border-gray-200 rounded-md mr-2 mb-4 hover:bg-gray-100 hover:bg-opacity-50 transition duration-300 ${size}`}
+              className={`flex flex-col items-center p-4 border border-gray-200 rounded-md hover:bg-gray-100 hover:bg-opacity-50 transition duration-300 ${size}`}
             >
               <div
                 className={`w-24 h-24 bg-gray-200 rounded-full mb-2 ${size}`}
@@ -56,10 +56,17 @@ const ListDocuments = ({ size }: { size: string }) => {
                   backgroundPosition: "center",
                 }}
               />
-              <div className={`w-36 h-4 bg-gray-200 rounded mb-1 ${size}`}>
+              <div
+                className={`text-center text-sm font-medium ${size}`}
+                style={{
+                  width: "100%", // El ancho será 100% del contenedor
+                  whiteSpace: "nowrap", // Evita que el texto salte a la siguiente línea
+                  overflow: "hidden", // Oculta el texto que se desborda del contenedor
+                  textOverflow: "ellipsis", // Muestra "..." al final si el texto es muy largo
+                }}
+              >
                 {doc.name}
               </div>
-              <div className={`w-24 h-3 bg-gray-200 rounded ${size}`} />
             </a>
           </Link>
         ))

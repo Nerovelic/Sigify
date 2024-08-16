@@ -13,7 +13,7 @@ const openDatabase = () => {
     };
 
     request.onerror = (event) => {
-      reject(`IndexedDB error: ${event.target.errorCode}`);
+      reject(new Error(`IndexedDB error: ${event.target.errorCode}`));
     };
   });
 };
@@ -40,26 +40,37 @@ export const saveBlobToIndexedDB = async (blob, id) => {
 
 // Obtener un blob de IndexedDB
 export const getBlobFromIndexedDB = async (id) => {
-  return new Promise(async (resolve, reject) => {
-    const db = await openDatabase();
-    const transaction = db.transaction(["pdfs"], "readonly");
-    const store = transaction.objectStore("pdfs");
+  return new Promise((resolve, reject) => {
+    openDatabase()
+      .then((db) => {
+        const transaction = db.transaction(["pdfs"], "readonly");
+        const store = transaction.objectStore("pdfs");
 
-    const request = store.get(id);
+        const request = store.get(id);
 
-    request.onsuccess = (event) => {
-      if (event.target.result) {
-        resolve(event.target.result.blob);
-      } else {
-        reject("No se encontró el blob con ese ID en IndexedDB");
-      }
-    };
+        request.onsuccess = (event) => {
+          if (event.target.result) {
+            resolve(event.target.result.blob);
+          } else {
+            reject(new Error("No se encontró el blob con ese ID en IndexedDB"));
+          }
+        };
 
-    request.onerror = (event) => {
-      reject(
-        `Error al recuperar el blob de IndexedDB: ${event.target.errorCode}`
-      );
-    };
+        request.onerror = (event) => {
+          reject(
+            new Error(
+              `Error al recuperar el blob de IndexedDB: ${event.target.errorCode}`
+            )
+          );
+        };
+      })
+      .catch((error) => {
+        reject(
+          error instanceof Error
+            ? error
+            : new Error(`Error inesperado: ${error}`)
+        );
+      });
   });
 };
 
