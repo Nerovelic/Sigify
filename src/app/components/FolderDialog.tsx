@@ -1,16 +1,21 @@
+"use client";
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import ListDocuments from "../listaDocumentos/listDocuments";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Tabs,
+  Tab,
+  Typography,
+} from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import Typography from "@material-ui/core/Typography";
+import ListDocuments from "../listaDocumentos/listDocuments";
+import { useRouter } from "next/navigation";
+import { saveBlobToIndexedDB } from "../utils/indexedDB";
 
 interface FolderDialogProps {
   isOpen: boolean;
@@ -19,13 +24,68 @@ interface FolderDialogProps {
 
 const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [fileUploaded, setFileUploaded] = useState<File | null>(null);
   const [uploadInProgress, setUploadInProgress] = useState(false);
-  const [progress, setProgress] = useState<number>(0);
+  const [fileUploaded, setFileUploaded] = useState<File | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setActiveTab(newValue);
   };
+
+  const router = useRouter();
+  
+  const handleFileUpload = (file: File) => {
+    setUploadInProgress(true);
+    setFileUploaded(file);
+    const totalSize = file.size;
+    let loadedSize = 0;
+  
+    const reader = new FileReader();
+    reader.onload = () => {
+      loadedSize += reader.result?.toString().length ?? 0;
+      const percentage = Math.round((loadedSize / totalSize) * 100);
+      setProgress(percentage);
+  
+      if (loadedSize < totalSize) {
+        setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
+      } else {
+        // Verificar si todo el archivo se ha cargado
+        setTimeout(() => {
+          const storedFiles = JSON.parse(
+            localStorage.getItem("uploadedPdfs") ?? "[]"
+          ) as Array<{ id: number; name: string; path: string }>;
+  
+          // Crear un nuevo ID para el archivo basado en el número de archivos actuales
+          const newId = storedFiles.length > 0 ? storedFiles[storedFiles.length - 1].id + 1 : 0;
+  
+          // Crear un objeto que representará el archivo subido
+          const newFile = {
+            id: newId,
+            name: file.name,
+            path: URL.createObjectURL(file),
+          };
+  
+          // Agregar el nuevo archivo al array de archivos guardados
+          storedFiles.push(newFile);
+  
+          // Guardar el array actualizado en localStorage
+          localStorage.setItem("uploadedPdfs", JSON.stringify(storedFiles));
+  
+          onClose();
+          setUploadInProgress(false);
+          setProgress(0); // Restablecer el progreso
+  
+          console.log("ID asignado al archivo:", newId);
+  
+          // Redirigir al usuario a la página dinámica del nuevo archivo subido
+          router.push(`/listaDocumentos/${newId}`);
+        }, 100);
+      }
+    };
+  
+    reader.readAsText(file.slice(0, 1024));
+  };
+  
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -42,28 +102,6 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
     console.log("Archivo soltado:", file);
     handleFileUpload(file);
   };
-
-  const handleFileUpload = (file: File) => {
-    setUploadInProgress(true);
-    setFileUploaded(file);
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileContent = reader.result;
-      const blob = new Blob([fileContent as ArrayBuffer], { type: file.type });
-      const blobUrl = URL.createObjectURL(blob);
-
-      // Save blob URL to localStorage
-      localStorage.setItem("uploadedPdf", blobUrl);
-
-      onClose();
-      setUploadInProgress(false);
-      setProgress(0); // Reset progress
-    };
-    reader.readAsArrayBuffer(file);
-  };
-
-  const minHeight2 = "200px"; // Cambiado para mantenerlo en la vista
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
@@ -87,7 +125,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
         {activeTab === 1 && (
           <div
             style={{
-              minHeight: minHeight2,
+              minHeight: "400px",
               padding: "16px",
               display: "flex",
               flexDirection: "column",

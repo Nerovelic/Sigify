@@ -33,7 +33,7 @@ const LinearProgressWithLabel: React.FC<CustomLinearProgressProps> = ({
 const useStyles = makeStyles({
   progressBar: {
     position: "absolute",
-    top: 220,
+    top: 312,
     right: 10,
     left: 260,
     width: "24%",
@@ -41,7 +41,7 @@ const useStyles = makeStyles({
   progressLabel: {
     position: "relative",
     top: 2,
-    left: 10,
+    left: 20,
   },
 });
 
