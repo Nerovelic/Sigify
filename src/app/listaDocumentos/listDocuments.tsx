@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { getBlobFromIndexedDB } from "../utils/indexedDB";
 
 interface StoredFile {
   id: string;
@@ -9,36 +8,16 @@ interface StoredFile {
   url?: string;
 }
 
-const ListDocuments = ({ size }: { size: string }) => {
-  const [storedFiles, setStoredFiles] = useState<StoredFile[]>([]);
+interface ListDocumentsProps {
+  documents: StoredFile[];
+  size: string;
+}
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      const files: StoredFile[] = JSON.parse(
-        localStorage.getItem("uploadedPdfs") ?? "[]"
-      );
-      const updatedFiles = await Promise.all(
-        files.map(async (file) => {
-          try {
-            const blob = await getBlobFromIndexedDB(file.id);
-            const url = blob ? URL.createObjectURL(blob) : "";
-            return { ...file, url };
-          } catch (error) {
-            console.error("Error al obtener el blob de IndexedDB:", error);
-            return { ...file, url: "" };
-          }
-        })
-      );
-      setStoredFiles(updatedFiles);
-    };
-
-    fetchDocuments();
-  }, []);
-
+const ListDocuments: React.FC<ListDocumentsProps> = ({ documents, size }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {storedFiles.length > 0 ? (
-        storedFiles.map((doc) => (
+      {documents.length > 0 ? (
+        documents.map((doc) => (
           <Link
             href={`/listaDocumentos/${doc.id}`} // Ruta dinámica basada en el ID del documento
             key={doc.id}

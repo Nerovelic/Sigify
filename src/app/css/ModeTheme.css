@@ -1,17 +1,53 @@
-.light-mode {
-  background-color: white;
-  color: black;
+/* ModeTheme.css */
+
+/* Estilos para el diálogo en modo oscuro */
+.dark-mode-dialog {
+  background-color: #1e1e1e; /* Color de fondo oscuro */
 }
 
-.dark-mode {
-  background-color: black;
-  color: white;
+/* Estilos para el diálogo en modo claro */
+.light-mode-dialog {
+  background-color: #ffffff; /* Color de fondo claro */
 }
 
-.light-nav {
-  /* Estilos para la barra de navegación en modo claro */
+/* Estilos para el contenido en modo oscuro */
+.dark-mode-content {
+  background-color: #333; /* Color de fondo del contenido oscuro */
+  color: #e0e0e0; /* Color de texto claro */
 }
 
-.dark-nav {
-  /* Estilos para la barra de navegación en modo oscuro */
+/* Estilos para el contenido en modo claro */
+.light-mode-content {
+  background-color: #ffffff; /* Color de fondo del contenido claro */
+  color: #000000; /* Color de texto oscuro */
+}
+
+/* Estilos para los bordes en modo oscuro */
+.border-gray-700 {
+  border-color: #4a4a4a; /* Color del borde en modo oscuro */
+}
+
+/* Estilos para los bordes en modo claro */
+.border-gray-200 {
+  border-color: #e0e0e0; /* Color del borde en modo claro */
+}
+
+/* Estilos para los botones seleccionados en modo oscuro */
+.bg-gray-700 {
+  background-color: #4a4a4a; /* Color de fondo para elementos seleccionados en modo oscuro */
+}
+
+/* Estilos para los botones seleccionados en modo claro */
+.bg-gray-100 {
+  background-color: #f0f0f0; /* Color de fondo para elementos seleccionados en modo claro */
+}
+
+/* Estilos para los divisores en modo oscuro */
+.bg-gray-600 {
+  background-color: #4a4a4a; /* Color de fondo del divisor en modo oscuro */
+}
+
+/* Estilos para los divisores en modo claro */
+.bg-gray-300 {
+  background-color: #e0e0e0; /* Color de fondo del divisor en modo claro */
 }
