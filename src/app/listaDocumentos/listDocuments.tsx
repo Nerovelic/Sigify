@@ -13,7 +13,10 @@ interface ListDocumentsProps {
   size: string;
 }
 
-const ListDocuments: React.FC<ListDocumentsProps> = ({ documents, size }) => {
+const ListDocuments: React.FC<ListDocumentsProps> = ({
+  documents = [],
+  size,
+}) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {documents.length > 0 ? (

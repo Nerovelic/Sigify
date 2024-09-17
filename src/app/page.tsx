@@ -69,6 +69,11 @@ export default function Home() {
     setFilteredDocuments(filteredDocs);
   };
 
+  // Función para manejar cuando un archivo es subido exitosamente
+  const handleFileUploadSuccess = (newFile: StoredFile) => {
+    setDocuments((prevDocuments) => [newFile, ...prevDocuments]);
+  };
+
   return (
     <div
       className={`flex flex-col min-h-screen ${
@@ -103,7 +108,11 @@ export default function Home() {
           {/* Mostrar documentos filtrados */}
         </div>
       </div>
-      <FolderDialog isOpen={folderVisible} onClose={closeFolder} />
+      <FolderDialog
+        isOpen={folderVisible}
+        onClose={closeFolder}
+        onFileUploadSuccess={handleFileUploadSuccess}
+      />
     </div>
   );
 }

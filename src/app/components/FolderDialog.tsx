@@ -20,9 +20,14 @@ import { useRouter } from "next/navigation";
 interface FolderDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  onFileUploadSuccess: (newFile: any) => void;
 }
 
-const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
+const FolderDialog: React.FC<FolderDialogProps> = ({
+  isOpen,
+  onClose,
+  onFileUploadSuccess,
+}) => {
   const [activeTab, setActiveTab] = useState(0);
   const [uploadInProgress, setUploadInProgress] = useState(false);
   const [fileUploaded, setFileUploaded] = useState<File | null>(null);
@@ -33,19 +38,19 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
   };
 
   const router = useRouter();
-  
+
   const handleFileUpload = (file: File) => {
     setUploadInProgress(true);
     setFileUploaded(file);
     const totalSize = file.size;
     let loadedSize = 0;
-  
+
     const reader = new FileReader();
     reader.onload = () => {
       loadedSize += reader.result?.toString().length ?? 0;
       const percentage = Math.round((loadedSize / totalSize) * 100);
       setProgress(percentage);
-  
+
       if (loadedSize < totalSize) {
         setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
       } else {
@@ -54,38 +59,43 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
           const storedFiles = JSON.parse(
             localStorage.getItem("uploadedPdfs") ?? "[]"
           ) as Array<{ id: number; name: string; path: string }>;
-  
+
           // Crear un nuevo ID para el archivo basado en el número de archivos actuales
-          const newId = storedFiles.length > 0 ? storedFiles[storedFiles.length - 1].id + 1 : 0;
-  
+          const newId =
+            storedFiles.length > 0
+              ? storedFiles[storedFiles.length - 1].id + 1
+              : 0;
+
           // Crear un objeto que representará el archivo subido
           const newFile = {
             id: newId,
             name: file.name,
             path: URL.createObjectURL(file),
           };
-  
+
           // Agregar el nuevo archivo al array de archivos guardados
           storedFiles.push(newFile);
-  
+
           // Guardar el array actualizado en localStorage
           localStorage.setItem("uploadedPdfs", JSON.stringify(storedFiles));
-  
+
+          // Llama a la función pasada por props para actualizar la lista de documentos en Home
+          onFileUploadSuccess(newFile);
+
           onClose();
           setUploadInProgress(false);
           setProgress(0); // Restablecer el progreso
-  
+
           console.log("ID asignado al archivo:", newId);
-  
+
           // Redirigir al usuario a la página dinámica del nuevo archivo subido
           router.push(`/listaDocumentos/${newId}`);
         }, 100);
       }
     };
-  
+
     reader.readAsText(file.slice(0, 1024));
   };
-  
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -119,7 +129,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
         </Tabs>
         {activeTab === 0 && (
           <div style={{ minHeight: "400px", padding: "16px" }}>
-            <ListDocuments size="w-2/5 h-32" />
+            <ListDocuments size="w-2/5 h-32" documents={[]} />
           </div>
         )}
         {activeTab === 1 && (
@@ -142,14 +152,17 @@ const FolderDialog: React.FC<FolderDialogProps> = ({ isOpen, onClose }) => {
               <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
             )}
             {uploadInProgress ? (
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
                 <InsertDriveFileIcon style={{ marginRight: "10px" }} />
-                <div style={{ marginRight: "155px" }}>
-                  <Typography variant="body1" color="textSecondary">
-                    {fileUploaded?.name}
-                  </Typography>
+                <div style={{ flexGrow: 1 }}>
+                  {/* Aquí se utiliza el componente LinearProgressWithLabel y se pasa el nombre del archivo */}
+                  <LinearProgressWithLabel
+                    value={progress}
+                    fileName={fileUploaded?.name || "Nombre no disponible"}
+                  />
                 </div>
-                <LinearProgressWithLabel value={progress} />
               </div>
             ) : (
               <div>
