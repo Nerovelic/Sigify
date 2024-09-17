@@ -51,3 +51,22 @@
 .bg-gray-300 {
   background-color: #e0e0e0; /* Color de fondo del divisor en modo claro */
 }
+
+/* Estilos para la casilla de verificación */
+.checkbox {
+  margin-right: 16px; /* Espacio entre la casilla de verificación y el contenido */
+}
+
+/* Estilos para el contenedor del documento */
+.document-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Estilo adicional para asegurar que la imagen de fondo del documento se ajuste correctamente */
+.document-image {
+  background-size: cover;
+  background-position: center;
+  width: 96px;
+  height: 96px;
+}

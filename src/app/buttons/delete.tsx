@@ -1,19 +1,30 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useClient } from "../hooks/useClient";
 
 interface DeleteButtonProps {
   isDarkMode: boolean;
+  onDelete: () => Promise<void>;
 }
 
-export default function DeleteButton({ isDarkMode }: DeleteButtonProps) {
-  const { deleteItem } = useClient();
+export default function DeleteButton({
+  isDarkMode,
+  onDelete,
+}: DeleteButtonProps) {
+  const [isClient, setIsClient] = useState(false);
 
-  const handleDeleteClick = () => {
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handleDeleteClick = async () => {
     console.log("Se hizo clic en el icono de eliminar");
-    const itemId = "";
-    deleteItem(itemId);
+    await onDelete();
   };
+
+  if (!isClient) {
+    return null; // O renderiza algo predeterminado para el servidor
+  }
 
   return (
     <button onClick={handleDeleteClick}>

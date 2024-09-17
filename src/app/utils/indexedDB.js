@@ -74,6 +74,35 @@ export const getBlobFromIndexedDB = async (id) => {
   });
 };
 
+// Eliminar un blob de IndexedDB
+export const deleteBlobFromIndexedDB = async (id) => {
+  try {
+    const db = await openDatabase();
+    const transaction = db.transaction(["pdfs"], "readwrite");
+    const store = transaction.objectStore("pdfs");
+
+    const request = store.delete(id);
+
+    request.onsuccess = () => {
+      console.log(`Blob con ID ${id} eliminado con éxito de IndexedDB`);
+    };
+
+    request.onerror = (event) => {
+      console.error(
+        `Error al eliminar el blob con ID ${id} de IndexedDB: ${event.target.errorCode}`
+      );
+    };
+
+    await new Promise((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = (event) =>
+        reject(new Error(`Transaction error: ${event.target.errorCode}`));
+    });
+  } catch (error) {
+    console.error("Error al eliminar el blob de IndexedDB:", error);
+  }
+};
+
 // Mostrar PDF
 export const displayPdf = async (id) => {
   try {

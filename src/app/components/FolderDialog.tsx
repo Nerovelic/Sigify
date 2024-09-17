@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -15,7 +15,6 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import ListDocuments from "../listaDocumentos/listDocuments";
 import { useRouter } from "next/navigation";
-// import { saveBlobToIndexedDB } from "../utils/indexedDB";
 
 interface FolderDialogProps {
   isOpen: boolean;
@@ -32,6 +31,12 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
   const [uploadInProgress, setUploadInProgress] = useState(false);
   const [fileUploaded, setFileUploaded] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setActiveTab(newValue);
@@ -54,41 +59,32 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
       if (loadedSize < totalSize) {
         setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
       } else {
-        // Verificar si todo el archivo se ha cargado
         setTimeout(() => {
           const storedFiles = JSON.parse(
             localStorage.getItem("uploadedPdfs") ?? "[]"
           ) as Array<{ id: number; name: string; path: string }>;
 
-          // Crear un nuevo ID para el archivo basado en el número de archivos actuales
           const newId =
             storedFiles.length > 0
               ? storedFiles[storedFiles.length - 1].id + 1
               : 0;
 
-          // Crear un objeto que representará el archivo subido
           const newFile = {
             id: newId,
             name: file.name,
             path: URL.createObjectURL(file),
           };
 
-          // Agregar el nuevo archivo al array de archivos guardados
           storedFiles.push(newFile);
 
-          // Guardar el array actualizado en localStorage
           localStorage.setItem("uploadedPdfs", JSON.stringify(storedFiles));
 
-          // Llama a la función pasada por props para actualizar la lista de documentos en Home
           onFileUploadSuccess(newFile);
 
           onClose();
           setUploadInProgress(false);
-          setProgress(0); // Restablecer el progreso
+          setProgress(0);
 
-          console.log("ID asignado al archivo:", newId);
-
-          // Redirigir al usuario a la página dinámica del nuevo archivo subido
           router.push(`/listaDocumentos/${newId}`);
         }, 100);
       }
@@ -100,7 +96,6 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      console.log("Archivo añadido:", file);
       handleFileUpload(file);
     }
   };
@@ -109,9 +104,20 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
     e.preventDefault();
     e.stopPropagation();
     const file = e.dataTransfer.files[0];
-    console.log("Archivo soltado:", file);
     handleFileUpload(file);
   };
+
+  const handleSelect = (id: string) => {
+    setSelectedIds((prevSelectedIds) =>
+      prevSelectedIds.includes(id)
+        ? prevSelectedIds.filter((selectedId) => selectedId !== id)
+        : [...prevSelectedIds, id]
+    );
+  };
+
+  if (!isClient) {
+    return null; // O un fallback para la renderización en el servidor
+  }
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
@@ -129,7 +135,12 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
         </Tabs>
         {activeTab === 0 && (
           <div style={{ minHeight: "400px", padding: "16px" }}>
-            <ListDocuments size="w-2/5 h-32" documents={[]} />
+            <ListDocuments
+              size="w-2/5 h-32"
+              documents={[]} // Aquí deberías pasar documentos reales
+              selectedIds={selectedIds}
+              onSelect={handleSelect}
+            />
           </div>
         )}
         {activeTab === 1 && (
@@ -157,7 +168,6 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
               >
                 <InsertDriveFileIcon style={{ marginRight: "10px" }} />
                 <div style={{ flexGrow: 1 }}>
-                  {/* Aquí se utiliza el componente LinearProgressWithLabel y se pasa el nombre del archivo */}
                   <LinearProgressWithLabel
                     value={progress}
                     fileName={fileUploaded?.name || "Nombre no disponible"}
