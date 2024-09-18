@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 interface StoredFile {
@@ -20,21 +20,42 @@ const ListDocuments: React.FC<ListDocumentsProps> = ({
   selectedIds,
   onSelect,
 }) => {
+  // Estado local para controlar qué checkbox está visible
+  const [visibleCheckboxes, setVisibleCheckboxes] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const handleRightClick = (e: React.MouseEvent, id: string) => {
+    e.preventDefault(); // Previene el menú contextual del navegador
+
+    // Alterna la visibilidad del checkbox
+    setVisibleCheckboxes((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+
+    // Marca o desmarca el documento en la lista de seleccionados
+    onSelect(id);
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {documents.length > 0 ? (
         documents.map((doc) => (
           <div
             key={doc.id}
-            className="relative border border-gray-200 rounded-md p-4 hover:bg-gray-100 hover:bg-opacity-50 transition duration-300"
+            className="relative rounded-md p-4 hover:bg-gray-100 hover:bg-opacity-50 transition duration-300"
+            onContextMenu={(e) => handleRightClick(e, doc.id)} // Maneja el clic derecho
           >
-            {/* Casilla de verificación en la esquina superior izquierda */}
-            <input
-              type="checkbox"
-              checked={selectedIds.includes(doc.id)}
-              onChange={() => onSelect(doc.id)}
-              className="absolute top-2 left-2"
-            />
+            {/* Mostrar el checkbox solo si es visible para este documento */}
+            {visibleCheckboxes[doc.id] && (
+              <input
+                type="checkbox"
+                checked={selectedIds.includes(doc.id)}
+                onChange={() => onSelect(doc.id)}
+                className="absolute top-2 left-2"
+              />
+            )}
             {/* Contenido del documento */}
             <Link href={`/listaDocumentos/${doc.id}`} passHref legacyBehavior>
               <a className="flex flex-col items-center w-full">
@@ -44,6 +65,7 @@ const ListDocuments: React.FC<ListDocumentsProps> = ({
                     backgroundImage: `url(${doc.url})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
+                    border: "none",
                   }}
                 />
                 <div
