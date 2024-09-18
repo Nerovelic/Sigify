@@ -29,8 +29,8 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [uploadInProgress, setUploadInProgress] = useState(false);
-  const [fileUploaded, setFileUploaded] = useState<File | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [filesUploaded, setFilesUploaded] = useState<File[]>([]);
+  const [progress, setProgress] = useState<number[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isClient, setIsClient] = useState(false);
 
@@ -44,67 +44,78 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
 
   const router = useRouter();
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = (files: File[]) => {
     setUploadInProgress(true);
-    setFileUploaded(file);
-    const totalSize = file.size;
-    let loadedSize = 0;
+    setFilesUploaded(files);
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      loadedSize += reader.result?.toString().length ?? 0;
-      const percentage = Math.round((loadedSize / totalSize) * 100);
-      setProgress(percentage);
+    files.forEach((file, index) => {
+      const totalSize = file.size;
+      let loadedSize = 0;
 
-      if (loadedSize < totalSize) {
-        setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
-      } else {
-        setTimeout(() => {
-          const storedFiles = JSON.parse(
-            localStorage.getItem("uploadedPdfs") ?? "[]"
-          ) as Array<{ id: number; name: string; path: string }>;
+      const reader = new FileReader();
+      reader.onload = () => {
+        loadedSize += reader.result?.toString().length ?? 0;
+        const percentage = Math.round((loadedSize / totalSize) * 100);
 
-          const newId =
-            storedFiles.length > 0
-              ? storedFiles[storedFiles.length - 1].id + 1
-              : 0;
+        setProgress((prevProgress) => {
+          const updatedProgress = [...prevProgress];
+          updatedProgress[index] = percentage;
+          return updatedProgress;
+        });
 
-          const newFile = {
-            id: newId,
-            name: file.name,
-            path: URL.createObjectURL(file),
-          };
+        if (loadedSize < totalSize) {
+          setTimeout(() => reader.readAsText(file.slice(loadedSize)), 1000);
+        } else {
+          setTimeout(() => {
+            const storedFiles = JSON.parse(
+              localStorage.getItem("uploadedPdfs") ?? "[]"
+            ) as Array<{ id: number; name: string; path: string }>;
 
-          storedFiles.push(newFile);
+            const newId =
+              storedFiles.length > 0
+                ? storedFiles[storedFiles.length - 1].id + 1
+                : 0;
 
-          localStorage.setItem("uploadedPdfs", JSON.stringify(storedFiles));
+            const newFile = {
+              id: newId,
+              name: file.name,
+              path: URL.createObjectURL(file),
+            };
 
-          onFileUploadSuccess(newFile);
+            storedFiles.push(newFile);
 
-          onClose();
-          setUploadInProgress(false);
-          setProgress(0);
+            localStorage.setItem("uploadedPdfs", JSON.stringify(storedFiles));
 
-          router.push(`/listaDocumentos/${newId}`);
-        }, 100);
-      }
-    };
+            onFileUploadSuccess(newFile);
 
-    reader.readAsText(file.slice(0, 1024));
+            // Finalizar carga de archivos
+            setUploadInProgress(false);
+            setProgress([]);
+
+            // Cerrar diálogo cuando la carga finalice
+            onClose();
+
+            router.push(`/listaDocumentos/${newId}`);
+          }, 100);
+        }
+      };
+
+      reader.readAsText(file.slice(0, 1024));
+    });
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      handleFileUpload(file);
+      const filesArray = Array.from(e.target.files);
+      handleFileUpload(filesArray);
     }
   };
 
   const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    const file = e.dataTransfer.files[0];
-    handleFileUpload(file);
+    const filesArray = Array.from(e.dataTransfer.files);
+    handleFileUpload(filesArray);
   };
 
   const handleSelect = (id: string) => {
@@ -116,12 +127,12 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
   };
 
   if (!isClient) {
-    return null; // O un fallback para la renderización en el servidor
+    return null;
   }
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Abrir un archivo</DialogTitle>
+      <DialogTitle>Abrir archivos</DialogTitle>
       <DialogContent>
         <Tabs
           value={activeTab}
@@ -137,7 +148,7 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
           <div style={{ minHeight: "400px", padding: "16px" }}>
             <ListDocuments
               size="w-2/5 h-32"
-              documents={[]} // Aquí deberías pasar documentos reales
+              documents={[]}
               selectedIds={selectedIds}
               onSelect={handleSelect}
             />
@@ -163,37 +174,41 @@ const FolderDialog: React.FC<FolderDialogProps> = ({
               <FileUploadIcon style={{ fontSize: 150, color: "#374347" }} />
             )}
             {uploadInProgress ? (
-              <div
-                style={{ display: "flex", alignItems: "center", width: "100%" }}
-              >
-                <InsertDriveFileIcon style={{ marginRight: "10px" }} />
-                <div style={{ flexGrow: 1 }}>
-                  <LinearProgressWithLabel
-                    value={progress}
-                    fileName={fileUploaded?.name || "Nombre no disponible"}
-                  />
+              filesUploaded.map((file, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <InsertDriveFileIcon style={{ marginRight: "10px" }} />
+                  <div style={{ flexGrow: 1 }}>
+                    <LinearProgressWithLabel
+                      value={progress[index] || 0}
+                      fileName={file.name || "Nombre no disponible"}
+                    />
+                  </div>
                 </div>
-              </div>
+              ))
             ) : (
               <div>
                 <label
                   htmlFor="fileInput"
-                  className={`${
-                    uploadInProgress ? "hidden" : "block"
-                  } bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-14 rounded inline-block relative cursor-pointer`}
+                  className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-14 rounded inline-block relative cursor-pointer`}
                 >
-                  Subir archivo
+                  Subir archivos
                   <input
                     id="fileInput"
                     type="file"
                     accept=".docx,.pdf"
                     className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
                     onChange={handleFileInputChange}
+                    multiple
                   />
                 </label>
-                <p className={`${uploadInProgress ? "hidden" : "block"}`}>
-                  o arrastrar aquí un archivo
-                </p>
+                <p>o arrastrar aquí archivos</p>
               </div>
             )}
           </div>
