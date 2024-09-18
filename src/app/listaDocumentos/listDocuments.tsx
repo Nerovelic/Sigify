@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
 
 interface StoredFile {
   id: string;
@@ -20,7 +21,6 @@ const ListDocuments: React.FC<ListDocumentsProps> = ({
   selectedIds,
   onSelect,
 }) => {
-  // Estado local para controlar qué checkbox está visible
   const [visibleCheckboxes, setVisibleCheckboxes] = useState<{
     [key: string]: boolean;
   }>({});
@@ -84,7 +84,27 @@ const ListDocuments: React.FC<ListDocumentsProps> = ({
           </div>
         ))
       ) : (
-        <p>No hay documentos cargados.</p>
+        <div
+          className="flex flex-col justify-center items-center h-screen w-full"
+          style={{
+            marginTop: "20vh",
+            marginLeft: "38vw",
+          }}
+        >
+          <FindInPageIcon
+            style={{ fontSize: "min(25vw, 100px)", color: "gray" }}
+            className="mb-4"
+          />
+          <p
+            className="text-gray-500 font-bold"
+            style={{
+              fontSize: "min(5vw, 2rem)",
+              textAlign: "center",
+            }}
+          >
+            No hay documentos cargados.
+          </p>
+        </div>
       )}
     </div>
   );
